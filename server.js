@@ -5,6 +5,7 @@ const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const path = require('path');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 
 //Passport configuration
 app.use(passport.initialize());
+app.use(express.static(path.join(__dirname, 'client/build')));
 require('./config/passport')(passport);
 
 //Db config
@@ -25,7 +27,7 @@ mongoose
   .catch(err => console.log(err));
 
 //First route
-app.get("/", (req, res) => res.send("hello!"));
+app.get("/", (req, res) => res.sendFile('../client/build/index.html'));
 
 app.use('/api/users', users);
 app.use('/api/profile', profile);
